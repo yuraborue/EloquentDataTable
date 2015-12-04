@@ -38,6 +38,7 @@ class DataTable
     {
         $this->setBuilder($builder);
         $this->setColumns($columns);
+        $this->setSearchColumns($columns);
 
         if ($formatRowFunction !== null) {
             $this->setFormatRowFunction($formatRowFunction);
@@ -66,6 +67,16 @@ class DataTable
     public function setColumns($columns)
     {
         $this->columns = $columns;
+        return $this;
+    }
+
+    /**
+     * @param mixed $columns
+     * @return $this
+     */
+    public function setSearchColumns($columns)
+    {
+        $this->searchColumns = $columns;
         return $this;
     }
 
@@ -284,7 +295,7 @@ class DataTable
     {
         $this->builder = $this->builder->where(
             function ($query) use ($search) {
-                foreach ($this->columns as $column) {
+                foreach ($this->searchColumns as $column) {
                     $query->orWhere(
                         new raw($this->getRawColumnQuery($column)),
                         'like',
